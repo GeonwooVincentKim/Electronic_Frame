@@ -83,6 +83,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun initStartPhotoFrameButton() {
+        startPhotoFrameButton.setOnClickListener{
+            val intent = Intent(this, PhotoFrameActivity::class.java)
+            imageURIList.forEachIndexed{index, uri ->
+                intent.putExtra("photo$index", uri.toString())
+            }
+
+            intent.putExtra("photoListSize", imageURIList.size)
+            startActivity(intent)
+        }
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -153,9 +165,5 @@ class MainActivity : AppCompatActivity() {
             .setNegativeButton("취소하기") { _, _ -> }
             .create()
             .show()
-    }
-
-    private fun initStartPhotoFrameButton() {
-
     }
 }
