@@ -126,6 +126,11 @@ class MainActivity : AppCompatActivity() {
                 val selectedImageURI: Uri? = data?.data
 
                 if (selectedImageURI != null) {
+                    if(imageURIList.size == 6){
+                        Toast.makeText(this, "이미 사진이 꽉 차 있습니다.", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+
                     imageURIList.add(selectedImageURI)
                     imageViewList[imageURIList.size - 1].setImageURI(selectedImageURI)
                 } else {
