@@ -1,11 +1,15 @@
 package com.example.electronicframe
 
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 
@@ -29,12 +33,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == 2000) {
+                // There are no request codes
+                val data: Intent? = result.data
+                initStartPhotoFrameButton()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initAddPhotoButton()
         initStartPhotoFrameButton()
+
+
     }
 
     private fun initAddPhotoButton() {
@@ -100,6 +115,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initStartPhotoFrameButton() {
+        /* `intent` apply the `SAP` function */
 
+//        val intent = Intent(Intent.ACTION_GET_CONTENT)
+//        intent.type = "image/*"
+//        registerForActivityResult(ActivityResultContracts.RequestPermission()){
+//            Toast.makeText(this, "")
+//        }
+//
+//        startActivityForResult(){
+//            activityResult ->
+//        }
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        resultLauncher.launch(intent)
     }
 }
