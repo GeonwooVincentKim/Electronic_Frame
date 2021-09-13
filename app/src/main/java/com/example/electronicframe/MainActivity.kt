@@ -3,6 +3,7 @@ package com.example.electronicframe
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -33,12 +34,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val imageURIList: MutableList<Uri> = mutableListOf()
 
     private var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 // There are no request codes
                 val data: Intent? = result.data
+//                if(data != null){
+//                    imageURIList.add(data)
+//                } else {
+//
+//                }
+
                 initStartPhotoFrameButton()
             }
         }
@@ -99,15 +107,35 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigatePhotos() {
         /* `intent` apply the `SAP` function */
-        // startActivityForResult(intent, 2000)
 
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        resultLauncher.launch(intent)
+         startActivityForResult(intent, 2000)
+//        resultLauncher.launch(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+
+        when (requestCode) {
+            2000 -> {
+                val selectedImageURI: Uri? = data?.data
+
+                if (selectedImageURI != null) {
+                    imageURIList.add(selectedImageURI)
+                    imageViewList[imageURIList.size - 1].setImageURI(selectedImageURI)
+                } else {
+                    Toast.makeText(this, "사진을 가져오지 못했습니다", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else -> {
+                Toast.makeText(this, "사진을 가져오지 못했습니다", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun showPermissionContextPopup() {
