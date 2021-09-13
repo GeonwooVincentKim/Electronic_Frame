@@ -3,14 +3,18 @@ package com.example.electronicframe
 import android.net.Uri
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import java.util.*
 import kotlin.concurrent.timer
 
 class PhotoFrameActivity : AppCompatActivity() {
     private val photoList = mutableListOf<Uri>()
 
     private var currentPosition = 0
+
+    private var timer: Timer? = null
 
     private val photoImageView: ImageView by lazy {
         findViewById<ImageView>(R.id.photoImageView)
@@ -23,6 +27,8 @@ class PhotoFrameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_frame)
+
+        Log.d("PhotoFrame", "On Create!!")
 
         getPhotoUriFromIntent()
         startTimer()
@@ -40,8 +46,11 @@ class PhotoFrameActivity : AppCompatActivity() {
     }
 
     private fun startTimer() {
-        timer(period = 5 * 1000) {
+        timer = timer(period = 5 * 1000) {
             runOnUiThread {
+
+                Log.d("PhotoFrame", "5초가 지나감!!!")
+
                 val current = currentPosition
                 val next = if (photoList.size <= currentPosition + 1) 0 else currentPosition + 1
 
@@ -57,5 +66,30 @@ class PhotoFrameActivity : AppCompatActivity() {
                 currentPosition = next
             }
         }
+    }
+
+    /* For Timer Active Lifecycle */
+    override fun onStop() {
+        super.onStop()
+
+        Log.d("PhotoFrame", "On Stop!! Timer cancel")
+
+        timer?.cancel()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        Log.d("PhotoFrame", "On Start!! Timer start")
+
+        startTimer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        Log.d("PhotoFrame", "On Destroy!! Timer cancel")
+
+        timer?.cancel()
     }
 }
