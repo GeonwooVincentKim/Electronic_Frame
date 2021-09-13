@@ -2,4 +2,5 @@
     <string name="app_name">ElectronicFrame</string>
     <string name="execute">전자액자 실행하기</string>
     <string name="addPhoto">사진 추가하기</string>
+    <string name="todo">TODO</string>
 </resources>
