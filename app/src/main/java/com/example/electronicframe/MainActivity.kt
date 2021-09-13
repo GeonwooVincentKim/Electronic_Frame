@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import com.example.electronicframe.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private val addPhotoButton: Button by lazy {
@@ -33,18 +34,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private var resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == 2000) {
-                // There are no request codes
-                val data: Intent? = result.data
-                initStartPhotoFrameButton()
-            }
+
+
+//    var resultLauncher =
+//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//            if (result.resultCode == Activity.RESULT_OK) {
+//                // There are no request codes
+//                val data: Intent? = result.data
+//                initStartPhotoFrameButton()
+//            }
+//        }
+
+    private val getImage = registerForActivityResult(
+        ActivityResultContracts.GetContent(),
+        ActivityResultCallback{
+            binding.imageViewFirst.setImageURI(it)
+
         }
+    )
+
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
         initAddPhotoButton()
         initStartPhotoFrameButton()
@@ -122,12 +137,12 @@ class MainActivity : AppCompatActivity() {
 //        registerForActivityResult(ActivityResultContracts.RequestPermission()){
 //            Toast.makeText(this, "")
 //        }
-//
+//         startActivityForResult(intent, 2000)
 //        startActivityForResult(){
 //            activityResult ->
 //        }
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        resultLauncher.launch(intent)
+        getImage.launch(intent.type)
     }
 }
