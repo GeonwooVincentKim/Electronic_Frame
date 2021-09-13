@@ -12,6 +12,7 @@ import android.widget.Toast
 //import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+
 //import com.example.electronicframe.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -113,7 +114,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigatePhotos() {
+        /* `intent` apply the `SAP` function */
 
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+//        registerForActivityResult(ActivityResultContracts.RequestPermission()){
+//            Toast.makeText(this, "")
+//        }
+        startActivityForResult(intent, 2000)
+//        startActivityForResult(){
+//            activityResult ->
+//        }
+//        val intent = Intent(Intent.ACTION_GET_CONTENT)
+//        intent.type = "image/*"
+//        getImage.launch(intent.type)
     }
 
     private fun showPermissionContextPopup() {
@@ -129,19 +143,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initStartPhotoFrameButton() {
-        /* `intent` apply the `SAP` function */
 
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-//        registerForActivityResult(ActivityResultContracts.RequestPermission()){
-//            Toast.makeText(this, "")
-//        }
-        startActivityForResult(intent, 2000)
-//        startActivityForResult(){
-//            activityResult ->
-//        }
-//        val intent = Intent(Intent.ACTION_GET_CONTENT)
-//        intent.type = "image/*"
-//        getImage.launch(intent.type)
     }
 }
